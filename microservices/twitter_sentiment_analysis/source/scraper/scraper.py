@@ -10,6 +10,7 @@ from sentiment_analysis.sentiment import perform_sentiment
 
 def scrape(query: str , limit: int):
     tweets_list = []
+    query = query + " lang:en"
     
     # Using TwitterSearchScraper to scrape data and append tweets to list
     for i,tweet in enumerate(sntwitter.TwitterSearchScraper(query).get_items()):
@@ -29,4 +30,4 @@ def scrape(query: str , limit: int):
 ## Export dataframe into a CSV
 # tweets_df2.to_csv('tweets.csv', sep=',', index=False)
 
-# print(scrape("#McDonaldPakistan lang:en", 1))
+# print(scrape("#imrankhan lang:en", 1))

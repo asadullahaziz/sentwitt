@@ -28,7 +28,7 @@ def perform_sentiment(text):
     scores = softmax(scores)
     ranking = np.argsort(scores)
     
-    return ranking[-1] # return last item in ranking array
+    return int(ranking[-1]) # return last item in ranking array
 
 # ranking = ranking[::-1]
 # for i in range(scores.shape[0]):
