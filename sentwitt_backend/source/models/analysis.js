@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-let Analysis = mongoose.Schema({
+let analysisSchema = mongoose.Schema({
     queryType: {
         type: String,
         required: true
@@ -26,4 +26,4 @@ let Analysis = mongoose.Schema({
     }
 }, {timeStamps: true});
 
-module.exports = mongoose.model("Analysis", Analysis);
+module.exports = mongoose.model("Analysis", analysisSchema);

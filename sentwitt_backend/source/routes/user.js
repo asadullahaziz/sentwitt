@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const auth = require("../middleware/auth");
 
 // Create
 router.post("/user", async (req, res) => {
     try {
         let user = new User(req.body);
-        let token = await user.generateAuthToen();
+        let token = await user.generateAuthToken();
         res.status(201).send({user, token});
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 });
 
@@ -30,18 +31,18 @@ router.patch("/user", auth,  async (req, res) => {
         res.status(200).send(updatedUser);
     }
     catch(error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 });
 
 // Delete
-router.delete("/users", auth, async (req, res) => {
+router.delete("/user", auth, async (req, res) => {
     try {
         await req.user.remove();
         res.status(200).send(req.user);
     }
     catch(error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 });
 

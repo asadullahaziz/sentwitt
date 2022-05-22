@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const { isEmail } = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const Analysis = require("../models/analysis");
 
-let UserSchema = mongoose.Schema({
+let userSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -44,7 +45,7 @@ userSchema.virtual("analyses", {
 
 
 // Schema Helper Methods
-UserSchema.static("findByCredentials", async function(email, password) {
+userSchema.static("findByCredentials", async function(email, password) {
     const user = this.findOne({email});
     
     if(!user) {
@@ -61,26 +62,31 @@ UserSchema.static("findByCredentials", async function(email, password) {
 });
 
 // Model Helper Methods
-UserSchema.method("generateAuthToken", async function() {
+userSchema.method("generateAuthToken", async function() {
     let token = jwt.sign({_id: this._id}, process.env.SECRET_KEY);
     this.tokens.push({ token });
     await this.save();
     return token;
 });
 
-UserSchema.method("toJSON", function() {
+userSchema.method("toJSON", function() {
     let user = this.toObject();
     delete user.password;
-    delete user.tokensl
+    delete user.tokens
     return user;
 });
 
 // Schema Middle Ware
-UserSchema.pre("save", async function(next) {
+userSchema.pre("save", async function(next) {
     if(this.isModified("password")) {
         this.password = bcrypt.hash(this.password, 8);
     }
     next();
 });
 
-module.exports = mongoose.model("User", UserSchema);
+userSchema.pre("remove", async function(next) {
+    await Analysis.deleteMany({user: this._id});
+    next();
+});
+
+module.exports = mongoose.model("User", userSchema);
