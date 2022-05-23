@@ -21,7 +21,6 @@ model = AutoModelForSequenceClassification.from_pretrained(MODEL)
 # returns intiger -> 0 = Negative , 1 = Neutral , 2 = Positive
 def perform_sentiment(text):
     
-    text = preprocess(text)
     encoded_input = tokenizer(text, return_tensors='pt')
     output = model(**encoded_input)
     scores = output[0][0].detach().numpy()

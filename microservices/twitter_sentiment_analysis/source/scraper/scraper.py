@@ -2,13 +2,14 @@
 import snscrape.modules.twitter as sntwitter
 # import pandas as pd
 from sentiment_analysis.sentiment import perform_sentiment
+from sentiment_analysis.cleaner import preprocess
 
 
 # query = "#pakistan lang:en"
 
 # maxTweets = 3000
 
-def scrape(query: str , limit: int):
+def scrape(query: str , limit: int, analysisId: str):
     tweets_list = []
     query = query + " lang:en"
     
@@ -16,7 +17,10 @@ def scrape(query: str , limit: int):
     for i,tweet in enumerate(sntwitter.TwitterSearchScraper(query).get_items()):
         if i>limit:
             break
-        tweets_list.append([tweet.user.username, tweet.id, tweet.date, tweet.content, tweet.url, perform_sentiment(tweet.content)])
+        
+        tweet.content = preprocess(tweet.content)
+        
+        tweets_list.append({"tweetUserName": tweet.user.username, "tweetId": tweet.id, "tweetDate": tweet.date, "tweetContent": tweet.content, "tweetUrl": tweet.url, "sentiment": perform_sentiment(tweet.content), "analysisId": analysisId})
     
     return tweets_list
 

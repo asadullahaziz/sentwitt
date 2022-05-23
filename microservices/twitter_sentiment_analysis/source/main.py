@@ -8,7 +8,7 @@ app = FastAPI()
 @app.post("/tweetanalysis")
 async def tweetAnalysis(request: Request):
     data = await request.json()
-    return scrape(data["query"], data["limit"])
+    return scrape(data["query"], data["limit"], data["analysisId"])
 
 @app.post("/sentiment_analysis")
 async def sentimentAnalysis(request: Request):
