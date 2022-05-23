@@ -1,0 +1,100 @@
+.result_main-container{
+    display: flex;
+    flex-direction: row;
+}
+.result{
+    background-color: #12181B;;
+    width: 100%;
+    height: 100vh;
+}
+.result-container{
+    margin-left: 20%;
+    margin-right: 20%;
+    border: 1px solid #F9994C;
+    height: 210px;
+    background-color: #2A2E35;
+    border-radius: 5px;
+}
+.search-query{
+    margin: 10px 25px;
+    color: #F9994C;
+    font-weight: 600; 
+    font-size: large;  
+}
+.search-query-display{
+    border: 1px solid #2A2E35;
+    background: #12181B;
+    color: #C1C1C1;
+    padding: 2px 25px;
+    font-size: larger;
+}
+.limit{
+    margin: 20px 25px 20px 100px;
+    color: #F9994C;
+    font-weight: 600; 
+    font-size: large; 
+}
+.downlaod{
+    border: 1px solid #F9994C !important;
+    margin: 0px 25px 20px 0px;
+    background-color: #12181B;
+    width: 250px;
+    font-size: small;
+    padding: 0px 5px !important; 
+    line-height: 2rem !important;
+    border-radius: 5px !important;
+    vertical-align: text-top;
+    
+}
+.download-text{
+    font-size: larger;
+    display: inline;
+    vertical-align: super;
+    font-weight: 400;
+}
+.tweet-range{
+    margin: 0px 14px 30px 25px;
+    color: #F9994C;
+    font-weight: 600; 
+    font-size: large; 
+
+}
+.date-range-display{
+    margin-bottom: 20px !important;
+    border: 1px solid #2A2E35;
+    background: #12181B;
+    color: #C1C1C1;
+    padding: 2px 25px;
+    font-size: larger;
+   
+}
+.dash{
+    color: #F9994C;
+    font-size: xx-large;
+    font-weight: 800;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.Time-date-display{
+    margin: 0px 344px 30px 33.7px;
+    border: 1px solid #2A2E35;
+    background: #12181B;
+    color: #C1C1C1;
+    padding: 2px 25px;
+    font-size: larger;
+}
+.result-display{
+    margin-bottom: 5px !important;
+}
+.date-display{
+    margin-bottom: 5px !important;
+}
+.table-result-bar{
+    color: #F9994C;
+    background-color: #2A2E35;
+    font-weight: 600;
+}
+.table-result-record thead tr {
+    border-top: 5px solid #12181B;
+    border-bottom: 10px solid #12181B;
+}

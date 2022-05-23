@@ -1,0 +1,155 @@
+.term-service{
+  text-align: center;
+  background-color: #F9994C;
+  padding: 8px;
+  color: #12181B;
+}
+.ServiceModal{
+  background-Color: 'transparent';
+   color: #12181B;
+   width: 40%;
+   height: 50%;
+   margin: 20% 31%;
+}
+/* .terms-modal{
+  color: #12181B;
+  width: 35%;
+  height: 50%;
+  margin-left: 34%;
+  margin-top: 25%;
+} */
+body{
+    background: #12181B;
+  }
+  .container-fluid{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+  .register-container{
+    width:650px !important;
+    background:#2A2E35;
+    margin-top: 30px !important;
+    padding: 30px 60px 30px 60px !important;
+    border-radius: 15px!important;
+    
+  }
+  .font-color{
+    margin-bottom: 20px !important;
+    color:#F9994C;
+    display: inline;
+  }
+  .form-group{
+    color: white ;
+    font-weight: bold;
+  
+    
+  }
+
+  .form-control-Register{
+    padding: 15px;
+    border: 0px solid white ;
+    border-color: white ;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 1px rgba(243, 243, 243, 0.6) !important;
+}
+
+  /* .form-control{
+    padding: 15px;
+    border: 0px solid white ;
+    border-color: white ;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 1px rgba(243, 243, 243, 0.6) !important;
+
+  } */
+  .btn-style{
+    background-color: #F9994C !important;
+    padding: 10px;
+    font-size: 20px;
+    box-shadow:#242424;
+    border: 2px solid #F9994C;
+    color: aliceblue;
+  }
+  .sep {
+    border: 1px solid white;
+    position: relative;
+    margin: 55px 8px 55px;
+  }
+  .or {
+    position: absolute;
+    width: 50px;
+    left: 50%;
+    color: #F9994C;
+    background: #2A2E35;
+    text-align: center;
+    margin: -10px 0 0 -25px;
+    line-height: 20px;
+  }
+  .btn-google{
+    background: white;
+  }
+  .buttonText
+  {
+    text-align: middle;
+  }
+  .mystyle
+  {
+    border-radius: 5px !important;
+    padding-left: 175px !important;
+    padding-right: 167px !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+
+  .image_Register{
+    height: 50px;
+    width: 50px;
+    margin-bottom: 20px;
+  }
+  .span_Register{
+      padding: 10px;
+      text-align: center ;
+  }
+  .input-name-bar{
+    margin-bottom: 200px ;
+  }
+  .input-group-text{
+        background-color: white;
+        border-color: white;
+  }
+  .zmdi-account{
+        color: black;
+  }
+  .zmdi-email{
+    color: black ;
+  }
+  .zmdi-key{
+    color: black ;
+  }
+  .zmdi-eye{
+    background-color: white;
+    color: black ;
+    padding-top: 20px ;
+    padding-right: 20px;
+    border-top-right-radius: 5px ;
+    border-bottom-right-radius: 5px; 
+  }
+
+  .zmdi-eye-off{
+    background-color: white;
+    color: black ;
+    padding-top: 20px ;
+    padding-right: 20px;
+    border-top-right-radius: 5px ;
+    border-bottom-right-radius: 5px; 
+  }
+  
+  .signin-link{
+      padding: 2px !important;
+      margin-top: 25px !important;
+      font-size: 16px;
+  }
+ 
+  .errors {
+    color: red;
+    margin-bottom: 8px;
+    margin-top: -4px;
+  }
