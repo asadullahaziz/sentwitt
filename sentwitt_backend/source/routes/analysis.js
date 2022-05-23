@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Analysis = require("../models/analysis");
+const Tweet = require("../models/tweet");
 const auth = require("../middleware/auth");
+const axios = require("axios");
 
 // Create
 router.post("/analysis", auth, async (req, res) => {
@@ -10,11 +12,21 @@ router.post("/analysis", auth, async (req, res) => {
             ...req.body,
             user: req.user._id
         });
-        // perfrom analysis request to microservice will be implementer here <<=====================
-        await analysis.save();
-        res.status(201).send(analysis);
+        analysis = await analysis.save();
+        
+        // Microservice API Call
+        let response = await axios.post(`${process.env.TSA_MS_ADDRESS}/tweetAnalysis`, {
+            query: analysis.queryType + analysis.query,
+            limit: analysis.limit,
+            analysisId: analysis._id.toString()
+        });
+        let tweets = response.data;
+        
+        await Tweet.insertMany(tweets);
+        
+        res.status(201).send({analysis, tweets});
     } catch (error) {
-        res.status(400).send(error);
+        res.status(400).send(error.message);
     }
 });
 
@@ -26,10 +38,12 @@ router.get("/analysis/:id", auth, async (req, res) => {
         if(!analysis) {
             throw new Error("No analysis found");
         }
-        // Tweets will be fetched and send will be implemented here <<=====================
-        res.status(201).send(analysis);
+        
+        let tweets = Tweet.find({analysisId: analysis._id});
+        
+        res.status(201).send({analysis, tweets});
     } catch (error) {
-        res.status(400).send(error);
+        res.status(400).send(error.message);
     }
 });
 // read all
@@ -41,7 +55,7 @@ router.get("/analysis", auth, async (req, res) => {
         }
         res.status(201).send(analyses);
     } catch (error) {
-        res.status(400).send(error);
+        res.status(400).send(error.message);
     }
 });
 
@@ -56,7 +70,7 @@ router.patch("/analysis/:id", auth, async (req, res) => {
         res.status(200).send(analysis);
     }
     catch(error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 });
 
@@ -67,10 +81,10 @@ router.delete("/analysis/:id", auth, async (req, res) => {
         if(!analysis) {
             throw new Error("No analysis found");
         }
-        // Delete All tweets reletaed to this analysis will be implemented here <<=====================
+        
         res.status(201).send(analysis);
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 });
 

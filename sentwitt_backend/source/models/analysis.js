@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Tweet = require("./tweet");
 
 let analysisSchema = mongoose.Schema({
     queryType: {
@@ -25,5 +26,10 @@ let analysisSchema = mongoose.Schema({
         ref: "User"
     }
 }, {timeStamps: true});
+
+analysisSchema.pre("remove", async function(next) {
+    await Tweet.deleteMany({analysisId: this._id});
+    next();
+});
 
 module.exports = mongoose.model("Analysis", analysisSchema);
