@@ -50,7 +50,7 @@ router.delete("/user", auth, async (req, res) => {
 router.post("/login", async (req, res) => {
     try {
         let user = await User.findByCredentials(req.body.email, req.body.password);
-        let token = user.generateAuthToen();
+        let token = await user.generateAuthToken();
         res.status(201).send({user, token});
     } catch (error) {
         res.status(400).send("Either Username or Email is incorrect");
