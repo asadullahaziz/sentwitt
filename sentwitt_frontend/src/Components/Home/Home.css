@@ -198,7 +198,15 @@
 .limitistyle:focus, .limitistyle:hover{
    box-shadow: #F9994C;
 }
-.submit-tweet{
+.submit-tweet:disabled{
+   background-color: #2A2E35;
+   color: #C1C1C1;
+   border: 1px solid #C1C1C1;
+   margin-left: 300px;
+   padding: 3px 20px;
+   font-weight: 400;
+}
+.submit-tweet:enabled{
    background-color: #2A2E35;
    color: #C1C1C1;
    border: 1px solid #F9994C;
@@ -206,7 +214,7 @@
    padding: 3px 20px;
    font-weight: 400;
 }
-.submit-tweet:focus{
+.submit-tweet:enabled:focus{
    box-shadow: #F9994C;
 }
 .filter-icon{

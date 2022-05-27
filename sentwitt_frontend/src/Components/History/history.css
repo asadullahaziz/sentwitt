@@ -135,6 +135,7 @@ tr.highlight {
     color: red ;
     text-align: left;
     margin-top: 3px;
+    pointer-events: none;
 }
 .delete-button{
     background-color: #2A2E35;

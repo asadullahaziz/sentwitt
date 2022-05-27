@@ -28,7 +28,9 @@ let analysisSchema = mongoose.Schema({
 }, {timeStamps: true});
 
 analysisSchema.pre("remove", async function(next) {
-    await Tweet.deleteMany({analysisId: this._id});
+    const res = await Tweet.deleteMany({analysisId: this._id});
+    console.log(this._id);
+    console.log(res.deletedCount);
     next();
 });
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from "../History/history.css";
 import Sidebar from '../Sidebar/Sidebar.jsx';
 import { BiFilter } from 'react-icons/bi'
@@ -8,41 +8,48 @@ import { RiDeleteBin6Fill } from 'react-icons/ri'
 import { HiOutlineRefresh } from 'react-icons/hi'
 import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'
 import { Table } from '@mui/material';
+import axios from 'axios';
 
 export default function History(props) {
-
-
-  const record = [
-    {
-      sr: 1,
-      Query: "T20 CRICKET WORLD CUP",
-      Limit: 100,
-      Date: "19/12/2021",
-      Time: "12:30 PM"
-    },
-    {
-      sr: 2,
-      Query: "CRICKET WORLD CUP",
-      Limit: 250,
-      Date: "17/12/2021",
-      Time: "12:45 AM"
-    },
-    {
-      sr: 3,
-      Query: "WORLD CUP",
-      Limit: 1000,
-      Date: "11/12/2021",
-      Time: "11:30 PM"
-    },
-    {
-      sr: 4,
-      Query: "DAVID WARNER",
-      Limit: 100000,
-      Date: "21/12/2021",
-      Time: "10:30 AM"
-    },
-  ];
-
+  const [allAnalysis, setAllAnalysis] = useState([]);
+  
+  async function fetchAllUserAnalysis() {
+    try {
+      let response = await axios.get("http://localhost:4000/analysis", {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('auth_token')
+        }
+      });
+      
+      setAllAnalysis(response.data);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  useEffect(fetchAllUserAnalysis, []);
+  
+  async function deleteAnalysis(e) {
+    const analysisId = e.target.getAttribute("data-analysis-id");
+    let allAnalysisCopy = allAnalysis;
+    try {
+      let response = await axios.delete(`http://localhost:4000/analysis/${analysisId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('auth_token')
+        }
+      });
+      if(response) {
+        let newAllAnalysis = allAnalysisCopy.filter(analysis => analysis._id != analysisId);
+        setAllAnalysis(newAllAnalysis);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
   return (
 
     <div className='history_main-container'>
@@ -55,14 +62,14 @@ export default function History(props) {
         <div className='history-container'>
           <div className='input-group'>
             <BiFilter className='history-filter-icon' size={40} />
-            <div class="form-outline bar-style">
-              <input type="search" id="form1" class="form-control History-bar" placeholder='Search' />
+            <div className="form-outline bar-style">
+              <input type="search" id="form1" className="form-control History-bar" placeholder='Search' />
             </div>
-            <button type="button" class="btn history-btn">
+            <button type="button" className="btn history-btn">
               <GoSearch />
             </button>
             <Link to="/HomePage">
-              <button type="button" class="btn add-sentiment">
+              <button type="button" className="btn add-sentiment">
                 <BsPlusCircle size={20} className="add-icon" /> <p className='button-text'>New Sentiment Analysis</p>
               </button></Link>
           </div>
@@ -78,16 +85,16 @@ export default function History(props) {
                 </tr>
               </thead>
               <tbody className='record-container'>
-                {record.map((r) =>
-                  <tr>
-                    <td>{r.sr}</td>
-                    <td>{r.Query}</td>
-                    <td>{r.Limit}</td>
-                    <td>{r.Date} </td>
-                    <td>{r.Time}</td>
-                    <td><Link to="/HomePage"> <button type="button" class="btn view-detail">VIew Detail</button></Link></td>
-                    <td><button type='button' className='btn delete-button'><RiDeleteBin6Fill className='delete-icon' /></button></td>
-                    <td><button type='button' className='btn refresh-button'><HiOutlineRefresh className='refresh-icon' /></button></td>
+                {allAnalysis.map((analysis, i) =>
+                  <tr key={analysis._id}>
+                    <td>{i+1}</td>
+                    <td>{analysis.query}</td>
+                    <td>{analysis.limit}</td>
+                    <td>{"Date"} </td>
+                    <td>{"Time"}</td>
+                    <td><Link to={`/ResultPage/${analysis._id}`}> <button type="button" className="btn view-detail">View Detail</button></Link></td>
+                    <td><button data-analysis-id={analysis._id} type='button' className='btn delete-button' onClick={deleteAnalysis}><RiDeleteBin6Fill className='delete-icon' /></button></td>
+                    <td><button data-analysis-id={analysis._id} type='button' className='btn refresh-button'><HiOutlineRefresh className='refresh-icon' /></button></td>
                   </tr>
                 )}
               </tbody>

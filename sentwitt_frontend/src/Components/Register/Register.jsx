@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import GoogleLogin from 'react-google-login'
 import styles from "../Register/Register.css";
 import img1 from '../../images/sentwintt.png'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup'
-import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Link, Route, Routes, useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
 
 
@@ -30,6 +31,8 @@ const validationSchema = yup.object({
 
 
 export default function Register() {
+    const navigate = useNavigate();
+    const [invalidUsernameOrPassword, setInvalidUsernameOrPassword] = useState(false);
 
     const [modalIsOpen, setModelIsOpen] = useState(false);
     const [passwordShown, setPasswordShown] = useState(false);
@@ -84,7 +87,34 @@ export default function Register() {
         >
             {formik => {
 
-                console.log(formik);
+                // console.log(formik);
+                const SignupButtonClicked = (event) => {
+                    event.preventDefault();
+
+                    console.log(formik.values);
+                    axios.post("http://localhost:4000/user", {
+                        name: formik.values.name,
+                        email: formik.values.email,
+                        password: formik.values.password
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((res) => {
+                        console.log(res);
+                        if (res.status === 201) {
+                            localStorage.setItem('auth_token', res.data.token);
+                            navigate('/HomePage');
+                        } else {
+                            setInvalidUsernameOrPassword(true);
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                        if (error.response.status === 500) {
+                            setInvalidUsernameOrPassword(true);
+                        }
+                    })
+                }
                 return (
 
                     <div className="container-fluid">
@@ -99,6 +129,7 @@ export default function Register() {
                                 </div>
 
                                 <h2 className='font-color'>Sign up</h2>
+                                {invalidUsernameOrPassword && <div className='errors'>Please provide all required fields correctly</div>}
                                 <Form className="register-form" id="register-form">
 
                                     <div className="input-group form-group">
@@ -154,7 +185,7 @@ export default function Register() {
                                         </Modal>
                                     </div>
 
-                                    <button type='submit' className='form-control  form-control-Register btn-style' disabled={!formik.isValid || !isTermsAccepted}> sign up </button>
+                                    <button onClick={SignupButtonClicked} type='submit' className='form-control  form-control-Register btn-style' disabled={!formik.isValid || !isTermsAccepted}> sign up </button>
                                     <div className='sep'>
                                         <span className='or'>OR</span>
                                     </div>

@@ -16,7 +16,7 @@ async function auth(req, res, next) {
         
         next();
     } catch (error) {
-        res.status(400).send({error: error.message});
+        res.status(412).send({message: "Not signed in"});
     }
 }
 

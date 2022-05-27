@@ -24,7 +24,7 @@ router.post("/analysis", auth, async (req, res) => {
         
         await Tweet.insertMany(tweets);
         
-        res.status(201).send({analysis, tweets});
+        res.status(201).send({analysis});
     } catch (error) {
         res.status(400).send(error.message);
     }
@@ -77,13 +77,25 @@ router.patch("/analysis/:id", auth, async (req, res) => {
 // Delete
 router.delete("/analysis/:id", auth, async (req, res) => {
     try {
-        const analysis = await Analysis.findOneAndDelete({_id: req.params.id, user: req.user._id});
+        let analysis = await Analysis.findOne({_id: req.params.id, user: req.user._id});
         
         if(!analysis) {
             throw new Error("No analysis found");
         }
         
+        await analysis.remove();
+        
         res.status(201).send(analysis);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Download Analysis
+router.get("/download/:id", auth, async (req, res) => {
+    try {
+        const tweets = await Tweet.find({analysisId: id});
+        
     } catch (error) {
         res.status(500).send(error.message);
     }

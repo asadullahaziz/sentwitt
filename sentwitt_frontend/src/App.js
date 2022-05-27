@@ -17,7 +17,7 @@ return (
       <Route path='HomePage' element={<Home/>}/>
       <Route path='HistoryPage' element={<History/>}/>   
       <Route path='UserPage' element={<User/>}/>  
-      <Route path='ResultPage' element={<Result/>}/>  
+      <Route path='ResultPage/:id' element={<Result/>}/>  
   </Routes>
 </Router>
 );
