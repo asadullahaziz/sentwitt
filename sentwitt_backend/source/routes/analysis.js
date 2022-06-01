@@ -4,6 +4,7 @@ const Analysis = require("../models/analysis");
 const Tweet = require("../models/tweet");
 const auth = require("../middleware/auth");
 const axios = require("axios");
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 // Create
 router.post("/analysis", auth, async (req, res) => {
@@ -94,8 +95,21 @@ router.delete("/analysis/:id", auth, async (req, res) => {
 // Download Analysis
 router.get("/download/:id", auth, async (req, res) => {
     try {
-        const tweets = await Tweet.find({analysisId: id});
+        const tweets = await Tweet.find({analysisId: req.params.id}, ["-_id", "-tweetId", "-analysisId"]);
         
+        const csvWriter = createCsvWriter({
+            path: './source/data/result.csv',
+            header: [
+                {id: 'tweetUserName', title: 'USER NAME'},
+                {id: 'tweetDate', title: 'DATE'},
+                {id: 'tweetContent', title: 'TWEET'},
+                {id: 'tweetUrl', title: 'URL'},
+                {id: 'sentiment', title: 'SENTIMENT'},
+            ]
+        });
+        await csvWriter.writeRecords(tweets);
+        
+        res.download("./source/data/result.csv");
     } catch (error) {
         res.status(500).send(error.message);
     }

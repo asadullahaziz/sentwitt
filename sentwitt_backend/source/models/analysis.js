@@ -25,12 +25,10 @@ let analysisSchema = mongoose.Schema({
         required: true,
         ref: "User"
     }
-}, {timeStamps: true});
+}, {timestamps: true});
 
 analysisSchema.pre("remove", async function(next) {
     const res = await Tweet.deleteMany({analysisId: this._id});
-    console.log(this._id);
-    console.log(res.deletedCount);
     next();
 });
 

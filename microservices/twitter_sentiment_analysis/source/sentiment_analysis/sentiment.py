@@ -2,7 +2,7 @@ from transformers import AutoModelForSequenceClassification
 from transformers import AutoTokenizer
 import numpy as np
 from scipy.special import softmax
-from sentiment_analysis.cleaner import preprocess
+import re
 
 # ** PyTorch Model GPU **
 
@@ -11,6 +11,19 @@ from sentiment_analysis.cleaner import preprocess
 # stance/abortion, stance/atheism, stance/climate, stance/feminist, stance/hillary
 
 # labels=["negative", "neutral", "positive"]
+
+def preprocess(text: str):
+    new_text = []
+    
+    text = text.replace("\n", " ")
+    text = re.sub(r"http\S+", "", text)
+    text = re.sub(r"www.\S+", "", text)
+    
+    for t in text.split(" "):
+        t = '@user' if t.startswith('@') and len(t) > 1 else t
+        t = 'http' if t.startswith('http') else t
+        new_text.append(t)
+    return " ".join(new_text)
 
 task='sentiment'
 MODEL = f"cardiffnlp/twitter-roberta-base-{task}"
