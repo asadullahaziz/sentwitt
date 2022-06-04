@@ -21,7 +21,7 @@ let userSchema = mongoose.Schema({
         }
     },
     phoneNo: {
-        type: Number,
+        type: String,
     },
     password: {
         type: String,

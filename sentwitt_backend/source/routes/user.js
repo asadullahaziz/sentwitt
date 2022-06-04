@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const OPT = require("../models/OTP");
 const auth = require("../middleware/auth");
+const mailOTP = require("../utils/mail");
 
 // Create
 router.post("/user", async (req, res) => {
@@ -78,6 +80,48 @@ router.post("/logoutAll", auth, async (req, res) => {
     }
     catch(error) {
         res.status(500).send({error: error.message});
+    }
+});
+
+router.post("/forgotPassword", async (req, res) => {
+    try {
+        // varifying email
+        let user = await User.findOne({email: req.body.email});
+        if(!user){
+            throw new Error("No user registered with the provided Email Address.");
+        }
+        // generating random 4 digit number
+        const code = Math.random() * (9999 - 1000) + 1000;
+        
+        // save OTP for compare
+        let opt = await OPT.findOneAndUpdate({email: user.email}, {email: user.email, code: code}, {upsert: true});
+        if(!opt) {
+            throw new Error("Code already sent");
+        }
+        
+        // email user
+        let result = mailOTP(user.email, code);
+        
+        res.status(200).send({message: "Code has been sent to your email address at " + user.email});
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+router.post("resetPassword", (req, res) => {
+    try {
+        // check if code is in database
+        await OPT.checkOPT(req.body.email, req.body.code);
+        
+        // update password
+        let user = User.findOne({email: req.body.email});
+        
+        user.password = req.body.password;
+        user.save();
+        
+        res.status(200).send({message: "Password has been reset. Please login in with new password."});
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 });
 
