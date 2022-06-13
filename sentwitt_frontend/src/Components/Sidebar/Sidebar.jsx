@@ -7,6 +7,8 @@ import { FaPlus } from 'react-icons/fa'
 import { FaRegListAlt } from 'react-icons/fa'
 import { FaPowerOff } from 'react-icons/fa'
 import { FaBars } from 'react-icons/fa'
+import { FaPencilAlt } from 'react-icons/fa'
+import { FaRegFileImage } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import img1 from '../../images/sentwintt.png'
@@ -29,6 +31,18 @@ const routes = [
     path: "/HistoryPage",
     name: "History",
     icon: <FaRegListAlt size="30px" />,
+  },
+
+  {
+    path: "/SearchPage",
+    name: "Query",
+    icon: <FaPencilAlt size="30px" />,
+  },
+
+  {
+    path: "/UploadimgPage",
+    name: "Image",
+    icon: <FaRegFileImage size="30px" />,
   },
 
   {

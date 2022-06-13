@@ -10,9 +10,17 @@ import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'
 import { Table } from '@mui/material';
 import axios from 'axios';
 
+
+
+
 export default function History(props) {
+
+  //   $(document).ready( function () {
+  //     $('#table_id').DataTable();
+  // } );
+
   const [allAnalysis, setAllAnalysis] = useState([]);
-  
+
   async function fetchAllUserAnalysis() {
     try {
       let response = await axios.get("http://localhost:4000/analysis", {
@@ -21,16 +29,18 @@ export default function History(props) {
           Authorization: 'Bearer ' + localStorage.getItem('auth_token')
         }
       });
-      
+
       setAllAnalysis(response.data);
-      
+
     } catch (error) {
       console.log(error);
     }
   }
-  
-  useEffect(fetchAllUserAnalysis, []);
-  
+
+  useEffect(() => {
+    fetchAllUserAnalysis();
+  }, []);
+
   async function deleteAnalysis(e) {
     const analysisId = e.target.getAttribute("data-analysis-id");
     let allAnalysisCopy = allAnalysis;
@@ -41,7 +51,7 @@ export default function History(props) {
           Authorization: 'Bearer ' + localStorage.getItem('auth_token')
         }
       });
-      if(response) {
+      if (response) {
         let newAllAnalysis = allAnalysisCopy.filter(analysis => analysis._id != analysisId);
         setAllAnalysis(newAllAnalysis);
       }
@@ -49,7 +59,19 @@ export default function History(props) {
       console.log(error);
     }
   }
-  
+
+  const handlePageClick = async (data) => {
+    console.log(data.selected);
+
+    // let currentPage = data.selected + 1;
+
+    // const commentsFormServer = await fetchComments(currentPage);
+
+    // setItems(commentsFormServer);
+    // scroll to the top
+    //window.scrollTo(0, 0)
+  };
+
   return (
 
     <div className='history_main-container'>
@@ -74,9 +96,11 @@ export default function History(props) {
               </button></Link>
           </div>
           <div className='table-container'>
-            <Table className='table table-record' size="sm">
+
+
+            <Table className='table table-record ' size="sm" >
               <thead>
-                <tr className='table-bar'>
+                <tr className='table-bar '>
                   <td># SR NO</td>
                   <td>QUERY</td>
                   <td>LIMIT</td>
@@ -87,7 +111,7 @@ export default function History(props) {
               <tbody className='record-container'>
                 {allAnalysis.map((analysis, i) =>
                   <tr key={analysis._id}>
-                    <td>{i+1}</td>
+                    <td>{i + 1}</td>
                     <td>{analysis.query}</td>
                     <td>{analysis.limit}</td>
                     <td>{"Date"} </td>
@@ -101,11 +125,26 @@ export default function History(props) {
             </Table>
           </div>
 
-
+          {/* <ReactPaginate 
+            previousLabel={"previous"}
+            nextLabel={"next"}
+            breakLabel={"..."}
+            pageCount={25}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={3}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination justify-content-center"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"page-item"}
+            previousLinkClassName={"page-link"}
+            nextClassName={"page-item"}
+            nextLinkClassName={"page-link"}
+            breakClassName={"page-item"}
+            breakLinkClassName={"page-link"}
+            activeClassName={"active"}
+          /> */}
         </div>
-
-
-
       </div>
     </div>
   )

@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import axios from 'axios';
-import GoogleLogin from 'react-google-login'
+// import GoogleLogin from 'react-google-login';
 import styles from "../Login/Login.css";
-import img1 from '../../images/sentwintt.png'
-import img2 from '../../images/loginImage.png'
+import img1 from '../../images/sentwintt.png';
+import img2 from '../../images/loginImage.png';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup'
 import { BrowserRouter as Router, Link, Route, Routes, useNavigate } from 'react-router-dom'
@@ -149,16 +149,14 @@ export default function Login() {
                                         </div>
                                         <div className="errors"><ErrorMessage name='password' /></div>
 
-                                        <div className=" p-1 mt-4 ">
-                                            <input type="checkbox" onClick={() => setIsTermAccepted(!isTermsAccepted)} />
-                                            <label htmlFor="checkbox" className='form-group p-3' > Remember me </label>
+                                        <div className='forgot'>
+                                        <Link to="ForgotPage">&nbsp;Forgot Password?</Link>
                                         </div>
-
-                                        <button onClick={loginButtonClicked} type='submit' className='form-control form-control-login btn-style' disabled={!formik.isValid || !isTermsAccepted}> Login </button>
+                                        <button onClick={loginButtonClicked} type='submit' className='form-control form-control-login btn-style' disabled={!formik.isValid}> Login </button>
                                         <div className='sep'>
                                             <span className='or'>OR</span>
                                         </div>
-                                        <div>
+                                        {/* <div>
                                             {
                                                 loginData ? (
                                                     <div>
@@ -173,7 +171,7 @@ export default function Login() {
                                                     </GoogleLogin>
                                                 )}
 
-                                        </div>
+                                        </div> */}
                                         <div class=" signin">
 
                                             <p className="form-group text-center signin-link">

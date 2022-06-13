@@ -66,7 +66,6 @@
     color: #C1C1C1;
     padding: 2px 25px;
     font-size: larger;
-   
 }
 .dash{
     color: #F9994C;
@@ -97,4 +96,26 @@
 .table-result-record thead tr {
     border-top: 5px solid #12181B;
     border-bottom: 10px solid #12181B;
+}
+.loader{
+    display: flex !important;
+    align-items: center !important;
+    color: #F9994C !important;
+    size: 30px !important;
+    justify-content: center !important;
+}
+.negative{
+    color: red;
+    font-weight: 500;
+    font-size: large;
+}
+.positive{
+    color:#3EA346;
+    font-weight: 650;
+    font-size: large;
+}
+.netural{
+    color: #F9994C;
+    font-weight: 500;
+    font-size: large;
 }

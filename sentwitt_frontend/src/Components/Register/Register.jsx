@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import GoogleLogin from 'react-google-login'
+// import GoogleLogin from 'react-google-login'
 import styles from "../Register/Register.css";
 import img1 from '../../images/sentwintt.png'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -122,12 +122,9 @@ export default function Register() {
                         <div className=' col-sm-4 col-xs-12' >
                             <div className='card register-container'>
                                 <div className='span_Register'>
-
                                     <img className='image_Register' src={img1} alt="Logo" />
                                     <h2 className=' font-color '>Sentwitt</h2>
-
                                 </div>
-
                                 <h2 className='font-color'>Sign up</h2>
                                 {invalidUsernameOrPassword && <div className='errors'>Please provide all required fields correctly</div>}
                                 <Form className="register-form" id="register-form">
@@ -189,7 +186,7 @@ export default function Register() {
                                     <div className='sep'>
                                         <span className='or'>OR</span>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         {
                                             loginData ? (
                                                 <div>
@@ -204,7 +201,7 @@ export default function Register() {
                                                 </GoogleLogin>
                                             )}
 
-                                    </div>
+                                    </div> */}
                                     <div class="signin">
                                         <p className="form-group text-center signin-link">
                                             Already have an account?

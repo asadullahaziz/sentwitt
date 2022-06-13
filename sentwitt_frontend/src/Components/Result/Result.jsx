@@ -6,6 +6,7 @@ import { HiOutlineDownload } from 'react-icons/hi'
 import { Table } from '@mui/material';
 import axios from 'axios';
 
+
 export default function Result(props) {
 
     const { id } = useParams();
@@ -29,7 +30,9 @@ export default function Result(props) {
         }
     }
 
-    useEffect(fetchTweets, []);
+    useEffect(() => {
+        fetchTweets();
+    }, []);
 
     function printDate(d) {
         const date = new Date(d);
@@ -86,14 +89,13 @@ export default function Result(props) {
                                         <td>{tweet.tweetContent}</td>
                                         <td>{tweet.tweetUserName}</td>
                                         <td>{printDate(tweet.tweetDate)}</td>
-                                        <td>{tweet.sentiment == 0 ? "Negative" : tweet.sentiment == 1 ? "Neutral" : "Positive"}</td>
+                                        <td><div>{tweet.sentiment == 0 ? <span className='negative'>Negative</span> : tweet.sentiment == 1 ? <span className='netural'>Netural</span> : <span className='positive'>Positive</span> }</div></td>
                                     </tr>
                                 )}
                             </tbody>
                         </Table>
                     </div>
                 </div>
-
             </div>
         </div>
     )

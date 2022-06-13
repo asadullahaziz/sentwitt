@@ -19,6 +19,7 @@ a:hover {
     background: #2A2E35;
     color: #F9994C;
     height: 100vh;
+    position: fixed !important;
 }
 .routes{
     color: pink !important;

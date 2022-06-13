@@ -7,7 +7,7 @@ import axios from 'axios';
 
 export default function User() {
 
-  const [invalidUsernameOrPassword, setInvalidUsernameOrPassword] = useState(false);
+  const [error, setError] = useState("");
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -58,7 +58,7 @@ export default function User() {
         userObj.phoneNo = phoneNo;
       }
       if(password) {
-        if(password != repeatPassword && password.length() < 8) {
+        if(password.length < 8 || password !== repeatPassword) {
           throw new Error("Password must match and must be greater than 8");
         }
         userObj.password = password;
@@ -75,14 +75,15 @@ export default function User() {
         email: response.data.email,
         phoneNo: response.data.phoneNo ? response.data.phoneNo : ""
       });
-      setInvalidUsernameOrPassword(false);
-    } catch (error) {
-      console.log(error.message);
-      setInvalidUsernameOrPassword(true);
+      setError("");
+    } catch (e) {
+      setError(e.message);
     }
   }
   
-  useEffect(fetchUser, []);
+  useEffect(() => {
+    fetchUser();
+  }, []);
   
   return (
     <div className='user_main-container'>
@@ -100,7 +101,6 @@ export default function User() {
 
             </div>
             <div className="col-md-7 ">
-            {invalidUsernameOrPassword && <div className='errors'>Please provide all required fields correctly</div>}
                 <form className="p-3 py-5">
                   <div className="d-flex justify-content-between align-items-center mb-3">
                   
@@ -126,8 +126,8 @@ export default function User() {
                       <label className="labels">Confirm New Password</label>
                       <input id="repeatPassword" type="password" name='repeatPassword' className="form-control" placeholder="Confirm New Password" />
                     </div>
-                    
                   </div>
+                  {error && <div className='errors'>{error}</div>}
                   <div className="mt-5 text-center">
                     <button className="btn btn-primary profile-button" type="submit" onClick={updateUser}>Save Profile</button>
                   </div>
