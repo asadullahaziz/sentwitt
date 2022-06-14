@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-const OPT = require("../models/OTP");
+const OTP = require("../models/OTP");
 const auth = require("../middleware/auth");
 const mailOTP = require("../utils/mail");
 
@@ -94,8 +94,8 @@ router.post("/forgotPassword", async (req, res) => {
         const code = Math.random() * (9999 - 1000) + 1000;
         
         // save OTP for compare
-        let opt = await OPT.findOneAndUpdate({email: user.email}, {email: user.email, code: code}, {upsert: true});
-        if(!opt) {
+        let otp = await OTP.updateOne({email: user.email}, {email: user.email, code: code}, {upsert: true});
+        if(!otp) {
             throw new Error("Code already sent");
         }
         
@@ -108,13 +108,13 @@ router.post("/forgotPassword", async (req, res) => {
     }
 });
 
-router.post("resetPassword", async (req, res) => {
+router.post("/resetPassword", async (req, res) => {
     try {
         // check if code is in database
-        await OPT.checkOPT(req.body.email, req.body.code);
+        await OTP.checkOTP(req.body.email, req.body.code);
         
         // update password
-        let user = User.findOne({email: req.body.email});
+        let user = await User.findOne({email: req.body.email});
         
         user.password = req.body.password;
         user.save();
