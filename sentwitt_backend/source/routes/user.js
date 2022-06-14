@@ -108,7 +108,7 @@ router.post("/forgotPassword", async (req, res) => {
     }
 });
 
-router.post("resetPassword", (req, res) => {
+router.post("resetPassword", async (req, res) => {
     try {
         // check if code is in database
         await OPT.checkOPT(req.body.email, req.body.code);

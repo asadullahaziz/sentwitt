@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 
 OTPschema = mongoose.Schema({
-    email : {
+    email: {
         type: String,
         unique: true,
         required: true
     },
     code: {
-        type: string,
+        type: String,
         required: true
     }
-}, timestamps = true);
+}, {timestamps: true});
 
 // Schema helper methods
 OTPschema.static("checkOTP", async function(email, code, next) {
@@ -23,4 +23,4 @@ OTPschema.static("checkOTP", async function(email, code, next) {
     return true;
 });
 
-module.exports = mongoose.Model(OTPschema);
+module.exports = mongoose.model("OPT", OTPschema);
