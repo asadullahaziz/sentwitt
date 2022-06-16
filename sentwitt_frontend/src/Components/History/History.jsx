@@ -9,6 +9,7 @@ import { HiOutlineRefresh } from 'react-icons/hi'
 import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'
 import { Table } from '@mui/material';
 import axios from 'axios';
+import search from '../textAnalysis/textAnalysis';
 
 
 
@@ -20,10 +21,11 @@ export default function History(props) {
   // } );
 
   const [allAnalysis, setAllAnalysis] = useState([]);
+  const [allFilteredAnalysis, setAllFilteredAnalysis] = useState([]);
 
   async function fetchAllUserAnalysis() {
     try {
-      let response = await axios.get("http://localhost:4000/analysis", {
+      let response = await axios.get(process.env.REACT_APP_BACKEND_ADDRESS + "analysis", {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + localStorage.getItem('auth_token')
@@ -31,6 +33,7 @@ export default function History(props) {
       });
 
       setAllAnalysis(response.data);
+      setAllFilteredAnalysis(response.data);
 
     } catch (error) {
       console.log(error);
@@ -44,20 +47,33 @@ export default function History(props) {
   async function deleteAnalysis(e) {
     const analysisId = e.target.getAttribute("data-analysis-id");
     let allAnalysisCopy = allAnalysis;
+    let allFilteredAnalysisCopy = allFilteredAnalysis;
     try {
-      let response = await axios.delete(`http://localhost:4000/analysis/${analysisId}`, {
+      let response = await axios.delete(process.env.REACT_APP_BACKEND_ADDRESS + `analysis/${analysisId}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + localStorage.getItem('auth_token')
         }
       });
       if (response) {
-        let newAllAnalysis = allAnalysisCopy.filter(analysis => analysis._id != analysisId);
+        let newAllAnalysis = allAnalysisCopy.filter(analysis => analysis._id !== analysisId);
         setAllAnalysis(newAllAnalysis);
+        let newAllFilteredAnalysis = allFilteredAnalysisCopy.filter(analysis => analysis._id !== analysisId);
+        setAllFilteredAnalysis(newAllFilteredAnalysis);
       }
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function filter(e) {
+    let search = e.target.value;
+    let newAllAnalysis = allAnalysis;
+
+    let newAllFilteredAnalysis = newAllAnalysis.filter((analysis) => {
+      return analysis.query.toLowerCase().includes(search.toLowerCase())
+    });
+    setAllFilteredAnalysis(newAllFilteredAnalysis);
   }
 
   const handlePageClick = async (data) => {
@@ -70,7 +86,16 @@ export default function History(props) {
     // setItems(commentsFormServer);
     // scroll to the top
     //window.scrollTo(0, 0)
-  };
+  }
+
+  function printDate(d) {
+    const date = new Date(d);
+    return date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+  }
+  function printTime(t) {
+    const date = new Date(t);
+    return date.getHours() + ":" + date.getMinutes();
+  }
 
   return (
 
@@ -85,7 +110,7 @@ export default function History(props) {
           <div className='input-group'>
             <BiFilter className='history-filter-icon' size={40} />
             <div className="form-outline bar-style">
-              <input type="search" id="form1" className="form-control History-bar" placeholder='Search' />
+              <input type="search" id="form1" className="form-control History-bar" placeholder='Search' onChange={filter} />
             </div>
             <button type="button" className="btn history-btn">
               <GoSearch />
@@ -109,13 +134,13 @@ export default function History(props) {
                 </tr>
               </thead>
               <tbody className='record-container'>
-                {allAnalysis.map((analysis, i) =>
+                {allFilteredAnalysis.map((analysis, i) =>
                   <tr key={analysis._id}>
                     <td>{i + 1}</td>
-                    <td>{analysis.query}</td>
+                    <td>{analysis.queryType + analysis.query}</td>
                     <td>{analysis.limit}</td>
-                    <td>{"Date"} </td>
-                    <td>{"Time"}</td>
+                    <td>{printDate(analysis.updatedAt)}</td>
+                    <td>{printTime(analysis.updatedAt)}</td>
                     <td><Link to={`/ResultPage/${analysis._id}`}> <button type="button" className="btn view-detail">View Detail</button></Link></td>
                     <td><button data-analysis-id={analysis._id} type='button' className='btn delete-button' onClick={deleteAnalysis}><RiDeleteBin6Fill className='delete-icon' /></button></td>
                     <td><button data-analysis-id={analysis._id} type='button' className='btn refresh-button'><HiOutlineRefresh className='refresh-icon' /></button></td>

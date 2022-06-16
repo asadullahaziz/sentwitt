@@ -16,7 +16,7 @@ export default function User() {
 
   async function fetchUser() {
     try {
-      const response = await axios.get("http://localhost:4000/user", {
+      const response = await axios.get(process.env.REACT_APP_BACKEND_ADDRESS + "user", {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + localStorage.getItem('auth_token')
@@ -64,7 +64,7 @@ export default function User() {
         userObj.password = password;
       }
       
-      const response = await axios.patch("http://localhost:4000/user", userObj ,{
+      const response = await axios.patch(process.env.REACT_APP_BACKEND_ADDRESS + "user", userObj ,{
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + localStorage.getItem('auth_token')

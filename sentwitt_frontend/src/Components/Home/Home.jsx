@@ -70,16 +70,16 @@ export default function Home() {
 
     let querytype;
     if (showFiled == 1) {
-      querytype = "#"
+      querytype = "#";
     }
     else if (showFiled == 2) {
-      querytype = "@"
+      querytype = "@";
     }
     else if (showFiled == 3) {
-      querytype = ""
+      querytype = " ";
     }
 
-    axios.post("http://localhost:4000/analysis", {
+    axios.post(process.env.REACT_APP_BACKEND_ADDRESS + "analysis", {
       queryType: querytype,
       query: queryForm.searchQuery,
       limit: queryForm.limit

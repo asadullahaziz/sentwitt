@@ -1,9 +1,9 @@
 import React from 'react'
-import styles from '../Code/code.css'
+import styles from './resetpassword.css'
 import img1 from '../../images/sentwintt.png'
 import { BrowserRouter as Router, Link, Route, Routes, useNavigate } from 'react-router-dom'
 
-export default function resetpassword() {
+export default function Resetpassword() {
   return (
     <div className='email-container'>
 
@@ -11,7 +11,7 @@ export default function resetpassword() {
         <h1 className='text-color history-font-size'><span className='font-color'>Reset </span> Password</h1>
     </div>
 
-    <div className="card  emailbox">
+    <div className="card  email-box">
         <div className='span_Register'>
             <img className='image_Register' src={img1} alt="Logo" />
             <h2 className=' font-color '>Sentwitt</h2>
@@ -19,6 +19,18 @@ export default function resetpassword() {
         </div>
         <div className='text-center'><h3 className='text-color'>Forgot your <span className='font-color'>password?</span> Let's get you a new one</h3></div>
         <form>
+        <div className="input-group codegroup">
+                        <div className="input-group-prepend">
+                            <div className="input-group-text" id='input-name'><i className="zmdi zmdi-email zmdi-hc-2x "></i></div>
+                        </div>
+                        <input type="email" name='email' className='form-control form-control-code' placeholder="Example@gmail.com" required />
+                    </div>
+                    <div className='codegroup input-group'>
+                        <div className="input-group-prepend">
+                            <div className="input-group-text" id='input-name'><i class="zmdi zmdi-key zmdi-hc-2x"></i></div>
+                        </div>
+                        <input type="number" name='password' className='form-control form-control-code'  placeholder="Enter code" maxLength={5} />
+                    </div>
             <div className="input-group codegroup">
                 <div className="input-group-prepend">
                     <div className="input-group-text" id='input-name'><i class="zmdi zmdi-key zmdi-hc-2x"></i></div>

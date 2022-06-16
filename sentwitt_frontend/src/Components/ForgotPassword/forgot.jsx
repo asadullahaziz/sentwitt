@@ -1,9 +1,34 @@
-import React from 'react';
-import { BrowserRouter as Router, Link, Route, Routes, useParams } from 'react-router-dom'
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Link, Route, Routes, useParams, useNavigate } from 'react-router-dom'
 import styles from '../ForgotPassword/forgot.css';
 import img1 from '../../images/sentwintt.png'
+import axios from 'axios';
 
-export default function forgot() {
+export default function Forgot() {
+    const navigate = useNavigate();
+    let [error, setError] = useState({
+        message: "",
+        show: false
+    });
+    async function forgotPassword(e) {
+        e.preventDefault();
+        let email = document.getElementById("forgotPasswordEmail").value;
+        
+        try {
+            let response = await axios.post(process.env.REACT_APP_BACKEND_ADDRESS + "forgotPassword", {email}, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if(response.status === 200){
+                navigate('/ResetPasswordPage');
+            }
+        } catch (e) {
+            
+        }
+    }
+    
     return (
         <div className='email-container'>
             
@@ -16,17 +41,16 @@ export default function forgot() {
                     <img className='image_Register' src={img1} alt="Logo" />
                     <h2 className=' font-color '>Sentwitt</h2>
                 </div>
-                <div className='text-center'><h3 className='text-color'>You can <span className='font-color'>reset</span> your password here.</h3></div>
+                <div className='text-center'><h3 className='text-color'>Enter your <span className='font-color'>Email</span> address here</h3></div>
                 <div className="input-group emailgroup">
                     <div className="input-group-prepend">
                         <div className="input-group-text" id='input-name'><i className="zmdi zmdi-email zmdi-hc-2x "></i></div>
                     </div>
-                    <input type="email" name='email' className='form-control form-control-email' placeholder="Example@gmail.com" required/>
+                    <input id="forgotPasswordEmail" type="email" name='email' className='form-control form-control-email' placeholder="Example@gmail.com" required/>
                 </div>
-                <span><Link to="/CodePage">
-                    <button type="submit" className="btn next-btn">
-                    <p className='download-text'>Next</p>
-                    </button></Link></span>
+                <button type="submit" className="btn next-btn" onClick={forgotPassword}>
+                <p className='download-text'>Next</p>
+                </button>
             </div>
         </div>
     )

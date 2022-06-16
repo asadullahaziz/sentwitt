@@ -92,7 +92,7 @@ export default function Register() {
                     event.preventDefault();
 
                     console.log(formik.values);
-                    axios.post("http://localhost:4000/user", {
+                    axios.post(process.env.REACT_APP_BACKEND_ADDRESS + "user", {
                         name: formik.values.name,
                         email: formik.values.email,
                         password: formik.values.password

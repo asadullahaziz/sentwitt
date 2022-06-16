@@ -1,8 +1,7 @@
 import React from 'react';
-import styles from '../Search/search.css';
+import styles from './textAnalysis.css';
 import Sidebar from '../Sidebar/Sidebar';
 import { GoSearch } from 'react-icons/go';
-
 
 export default function search() {
     return (

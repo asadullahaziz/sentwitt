@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Link, Route, Routes, useParams } from 'react-r
 import { HiOutlineDownload } from 'react-icons/hi'
 import { Table } from '@mui/material';
 import axios from 'axios';
+import fileDownload from 'js-file-download';
 
 
 export default function Result(props) {
@@ -17,13 +18,12 @@ export default function Result(props) {
 
     async function fetchTweets() {
         try {
-            const response = await axios.get("http://localhost:4000/analysis/" + id, {
+            const response = await axios.get(process.env.REACT_APP_BACKEND_ADDRESS + "analysis/" + id, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: 'Bearer ' + localStorage.getItem('auth_token')
                 }
             });
-            console.log(response.data);
             setAnalysis(response.data);
         } catch (error) {
             console.log(error.message);
@@ -37,6 +37,20 @@ export default function Result(props) {
     function printDate(d) {
         const date = new Date(d);
         return date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+    }
+
+    async function downloadResult(e) {
+        try {
+            const response = await axios.get(process.env.REACT_APP_BACKEND_ADDRESS + "download/" + id, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + localStorage.getItem('auth_token')
+                }
+            });
+            fileDownload(response.data, "analysis_result.csv");
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (
@@ -66,10 +80,10 @@ export default function Result(props) {
                     <div className='Time-display'>
                         <label className='tweet-range'>Date/Time: </label>
                         <span className='Time-date-display'> 13 MAY 2020, 11:40pm</span>
-                        <span><Link to="/">
-                            <button type="button" className="btn downlaod">
-                                <HiOutlineDownload size={20} className="download-icon" /> <p className='download-text'>Download Result</p>
-                            </button></Link></span>
+                        
+                        <button type="button" className="btn downlaod" onClick={downloadResult}>
+                            <HiOutlineDownload size={20} className="download-icon" /> <p className='download-text'>Download Result</p>
+                        </button>
                     </div>
                     <div className='table-container'>
                         <Table className='table table-result-record' size="sm">

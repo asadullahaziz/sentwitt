@@ -68,6 +68,8 @@ router.patch("/analysis/:id", auth, async (req, res) => {
             res.status(400).send({error: "No analysis found."});
         }
         // Update Analysis will be implementer here <<=====================
+        // delete old tweets
+        //get new tweets
         res.status(200).send(analysis);
     }
     catch(error) {
