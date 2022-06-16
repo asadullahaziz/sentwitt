@@ -150,7 +150,7 @@ export default function Login() {
                                         <div className="errors"><ErrorMessage name='password' /></div>
 
                                         <div className='forgot'>
-                                        <Link to="ForgotPage">&nbsp;Forgot Password?</Link>
+                                            <Link to="ForgotPage">&nbsp;Forgot Password?</Link>
                                         </div>
                                         <button onClick={loginButtonClicked} type='submit' className='form-control form-control-login btn-style' disabled={!formik.isValid}> Login </button>
                                         <div className='sep'>

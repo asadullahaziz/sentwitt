@@ -31,7 +31,7 @@ export default function User() {
       console.log(error.message);
     }
   }
-  
+
   async function updateUser(e) {
     e.preventDefault();
     let userObj = {};
@@ -40,31 +40,31 @@ export default function User() {
     let phoneNo = document.getElementById("phoneNo").value;
     let password = document.getElementById("password").value;
     let repeatPassword = document.getElementById("repeatPassword").value;
-    
+
     try {
-      if(name){
+      if (name) {
         userObj.name = name;
       }
       else {
         throw new Error("User Name must be provided");
       }
-      if(email){
+      if (email) {
         userObj.email = email;
       }
       else {
         throw new Error("User Name must be provided");
       }
-      if(phoneNo){
+      if (phoneNo) {
         userObj.phoneNo = phoneNo;
       }
-      if(password) {
-        if(password.length < 8 || password !== repeatPassword) {
+      if (password) {
+        if (password.length < 8 || password !== repeatPassword) {
           throw new Error("Password must match and must be greater than 8");
         }
         userObj.password = password;
       }
-      
-      const response = await axios.patch(process.env.REACT_APP_BACKEND_ADDRESS + "user", userObj ,{
+
+      const response = await axios.patch(process.env.REACT_APP_BACKEND_ADDRESS + "user", userObj, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + localStorage.getItem('auth_token')
@@ -80,11 +80,11 @@ export default function User() {
       setError(e.message);
     }
   }
-  
+
   useEffect(() => {
     fetchUser();
   }, []);
-  
+
   return (
     <div className='user_main-container'>
       <Sidebar />
@@ -101,37 +101,37 @@ export default function User() {
 
             </div>
             <div className="col-md-7 ">
-                <form className="p-3 py-5">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                  
+              <form className="p-3 py-5">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+
+                </div>
+                <div className="row mt-2 edit-profile">
+                  <div className="col-md-12">
+                    <label className="labels">Name</label>
+                    <input id="name" type="text" name='name' className="form-control" placeholder="Enter Your Name" defaultValue={user.name} />
                   </div>
-                  <div className="row mt-2 edit-profile">
-                    <div className="col-md-12">
-                      <label className="labels">Name</label>
-                      <input id="name" type="text" name='name' className="form-control" placeholder="Enter Your Name" defaultValue={user.name} />
-                    </div>
-                    <div className="col-md-12 mt-2">
-                      <label className="labels">Email ID</label>
-                      <input id="email" type="email" className="form-control" placeholder="emailaddress@gmail.com" defaultValue={user.email}/>
-                    </div>
-                    <div className="col-md-12 mt-2">
-                      <label className="labels">Mobile Number</label>
-                      <input id="phoneNo" type="number" name='phoneNo' className="form-control" placeholder="Enter Phone Number" defaultValue={user.phoneNo} />
-                    </div>
-                    <div className="col-md-12 mt-2">
-                      <label className="labels">New Password</label>
-                      <input id="password" type="Password" name='password' className="form-control" placeholder="Enter New Password" />
-                    </div>
-                    <div className="col-md-12 mt-2">
-                      <label className="labels">Confirm New Password</label>
-                      <input id="repeatPassword" type="password" name='repeatPassword' className="form-control" placeholder="Confirm New Password" />
-                    </div>
+                  <div className="col-md-12 mt-2">
+                    <label className="labels">Email ID</label>
+                    <input id="email" type="email" className="form-control" placeholder="emailaddress@gmail.com" defaultValue={user.email} />
                   </div>
-                  {error && <div className='errors'>{error}</div>}
-                  <div className="mt-5 text-center">
-                    <button className="btn btn-primary profile-button" type="submit" onClick={updateUser}>Save Profile</button>
+                  <div className="col-md-12 mt-2">
+                    <label className="labels">Mobile Number</label>
+                    <input id="phoneNo" type="number" name='phoneNo' className="form-control" placeholder="Enter Phone Number" defaultValue={user.phoneNo} />
                   </div>
-                </form>
+                  <div className="col-md-12 mt-2">
+                    <label className="labels">New Password</label>
+                    <input id="password" type="Password" name='password' className="form-control" placeholder="Enter New Password" />
+                  </div>
+                  <div className="col-md-12 mt-2">
+                    <label className="labels">Confirm New Password</label>
+                    <input id="repeatPassword" type="password" name='repeatPassword' className="form-control" placeholder="Confirm New Password" />
+                  </div>
+                </div>
+                {error && <div className='errors'>{error}</div>}
+                <div className="mt-5 text-center">
+                  <button className="btn btn-primary profile-button" type="submit" onClick={updateUser}>Save Profile</button>
+                </div>
+              </form>
             </div>
 
           </div>
