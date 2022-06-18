@@ -11,8 +11,6 @@ import Modal from 'react-modal'
 import DatePicker from "react-datepicker";
 import { Link, useNavigate } from 'react-router-dom'
 import BeatLoader from "react-spinners/BeatLoader";
-// import 'react-datepicker/dist/react-datepicker-cssmodules.css'
-// import { DateRangePicker } from 'react-date-range';
 import "react-datepicker/dist/react-datepicker.css";
 
 const initialValues = {
@@ -22,7 +20,6 @@ const initialValues = {
 
 export default function Home() {
   const navigate = useNavigate();
-  const [invalidUsernameOrPassword, setInvalidUsernameOrPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [queryForm, setQueryForm] = useState({
@@ -37,12 +34,8 @@ export default function Home() {
   const [showFiled, setshowFiled] = useState(1);
   const [buttonDisable, setButtonDisable] = useState(true);
 
-  const pattern = /[a-zA-Z0-9]/;
-
   const onQueryEnter = (e) => {
     setButtonDisable(true);
-    // console.log(e.target.value);
-    // if (e.which == 32) return;
     setQueryForm({
       searchQuery: e.target.value.replace(/\s/g, ''),
       limit: queryForm.limit
@@ -83,7 +76,6 @@ export default function Home() {
       queryType: querytype,
       query: queryForm.searchQuery,
       limit: queryForm.limit
-
     }, {
       headers: {
         'Content-Type': 'application/json',
@@ -91,19 +83,14 @@ export default function Home() {
       }
     }).then((res) => {
       if (res.status === 201) {
-        // console.log(res.body);
-        // localStorage.setItem('auth_token', res.data.token);
         setLoading(false);
         navigate('/ResultPage/' + res.data.analysis._id);
-
-      } else {
-        // setInvalidUsernameOrPassword(true);
+      }
+      else {
+        throw new Error("Faced errors while performing analysis");
       }
     }).catch((error) => {
       console.log(error);
-      if (error.response.status === 400) {
-        // setInvalidUsernameOrPassword(true);
-      }
     })
   }
 
@@ -131,7 +118,6 @@ export default function Home() {
               <div className='text-center'>
                 <h2 className='text-color'>Perform <span className='font-color'>Sentiment Analysis</span>  on Twitter</h2>
               </div>
-              {/* {invalidUsernameOrPassword && <div>Please provide all required fields correctly</div>} */}
               
 
               <div className='container-box'>

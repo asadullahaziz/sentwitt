@@ -105,7 +105,7 @@
     justify-content: center !important;
 }
 .negative{
-    color: red;
+    color: #c91414;
     font-weight: 500;
     font-size: large;
 }
@@ -115,7 +115,7 @@
     font-size: large;
 }
 .netural{
-    color: #F9994C;
+    color: #c9bd14;
     font-weight: 500;
     font-size: large;
 }

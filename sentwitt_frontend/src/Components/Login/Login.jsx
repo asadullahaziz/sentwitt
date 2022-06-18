@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import GoogleLogin from 'react-google-login';
 import styles from "../Login/Login.css";
 import img1 from '../../images/sentwintt.png';
 import img2 from '../../images/loginImage.png';
@@ -12,11 +11,6 @@ const initialValues = {
     email: '',
     password: ''
 }
-
-const onSubmit = values => {
-    // console.log('form data', values)
-}
-
 
 const validationSchema = yup.object({
     email: yup.string().email('Invalid email format').required('Required!'),
@@ -37,53 +31,16 @@ export default function Login() {
         setPasswordShown(!passwordShown);
     };
 
-
-    const [isTermsAccepted, setIsTermAccepted] = useState(false);
-
-    const [loginData, setLoginData] = useState(
-        localStorage.getItem('loginData')
-            ? JSON.parse(localStorage.getItem('loginData'))
-            : null
-    )
-
-    const handleFailure = (result) => {
-        alert(result);
-    };
-
-    const handleLogin = async (googleData) => {
-        console.log('run');
-        const res = await fetch('/api/google-login', {
-            method: 'POST',
-            body: JSON.stringify({
-                token: googleData.tokenId,
-            }),
-            headers: {
-                'content-Type': 'application/json',
-            },
-        });
-        const data = await res.json();
-        setLoginData(data);
-        localStorage.setItem('loginData', JSON.stringify(data));
-    };
-
-    const handleLogout = (googleData) => {
-        localStorage.removeItem('loginData');
-        setLoginData(null);
-    }
-
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={onSubmit}
             onFailure={() => console.log("validation failed")}
         >
             {formik => {
-                // console.log(formik.values);
                 const loginButtonClicked = (event) => {
                     event.preventDefault();
-
-                    console.log(formik.values);
+                    
                     axios.post(process.env.REACT_APP_BACKEND_ADDRESS + "login", {
                         email: formik.values.email,
                         password: formik.values.password
@@ -156,22 +113,6 @@ export default function Login() {
                                         <div className='sep'>
                                             <span className='or'>OR</span>
                                         </div>
-                                        {/* <div>
-                                            {
-                                                loginData ? (
-                                                    <div>
-                                                        <h3>You logged in as {loginData.email}</h3>
-                                                        <button onClick={handleLogout}>Logout</button>
-                                                    </div>
-                                                ) : (
-                                                    <GoogleLogin className='mystyle_login' clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                                                        buttonText="Login with Google" onSuccess={handleLogin} onFailure={handleFailure}
-                                                        cookiePolicy={'single_host_origin'}>
-
-                                                    </GoogleLogin>
-                                                )}
-
-                                        </div> */}
                                         <div class=" signin">
 
                                             <p className="form-group text-center signin-link">
