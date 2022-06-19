@@ -26,7 +26,7 @@ let userSchema = mongoose.Schema({
     password: {
         type: String,
         required: true,
-        min: 6
+        min: 8
     },
     tokens: [{
         token: {

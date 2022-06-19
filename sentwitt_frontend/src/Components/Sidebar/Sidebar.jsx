@@ -12,18 +12,19 @@ import { FaRegFileImage } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import img1 from '../../images/sentwintt.png'
+import axios from 'axios';
 
 
 const routes = [
   {
     path: "/UserPage",
-    name: "User",
+    name: "Profile",
     icon: <FaUserCircle size="30px" />,
   },
 
   {
     path: "/HomePage",
-    name: "Home",
+    name: "Analysis",
     icon: <FaPlus size="30px" />,
   },
 
@@ -35,7 +36,7 @@ const routes = [
 
   {
     path: "/SearchPage",
-    name: "Query",
+    name: "Text",
     icon: <FaPencilAlt size="30px" />,
   },
 
@@ -45,11 +46,11 @@ const routes = [
     icon: <FaRegFileImage size="30px" />,
   },
 
-  {
-    path: "/",
-    name: "Power Off",
-    icon: <FaPowerOff size="30px" />,
-  },
+  // {
+  //   path: "/",
+  //   name: "Log Out",
+  //   icon: <FaPowerOff size="30px" />,
+  // }
 
 ];
 
@@ -75,6 +76,25 @@ export default function Sidebar() {
       },
     },
   };
+
+  async function logout() {
+    try {
+      let response = await axios.post(process.env.REACT_APP_BACKEND_ADDRESS + "logout", {}, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('auth_token')
+        }
+      });
+      if(response.status === 200){
+        localStorage.removeItem("auth_token");
+      }
+      else {
+        throw new Error("Something went wrong");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <React.Fragment>
@@ -123,6 +143,19 @@ export default function Sidebar() {
                 </NavLink>
               ))
             }
+            <NavLink activeClassName="active" onClick={logout}
+              to="/"
+              key="Log Out"
+              className='link'>
+              <div className="icon"><FaPowerOff size="30px" /></div>
+              <AnimatePresence>
+                {isOpen && (<motion.div variants={showAnimation}
+                  initial="hidden"
+                  animate="show"
+                  exit="hidden"
+                  className='link_text' >Log Out</motion.div>)}
+              </AnimatePresence>
+            </NavLink>
           </section>
       </motion.div>
     </React.Fragment>

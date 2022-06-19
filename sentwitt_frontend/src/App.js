@@ -9,31 +9,31 @@ import ForgotPassword from './Components/ForgotPassword/Forgot.jsx';
 import ResetPassword from './Components/ResetPassword/Resetpassword.jsx';
 import Search from './Components/textAnalysis/textAnalysis.jsx';
 import UploadImage from './Components/UploadImage/uploadimg.jsx';
-import ProtectedRoutes from './Components/ProtectedRoutes';
-import {BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
+import Protected from './Components/Protected';
 
 
 function App() {
 
-return (
-<Router>
-  <Routes>
-      <Route path='/' element={<Login/>}/>
-      <Route path='RegisterPage' element={<Register/>}/>
-      {/* <Route element={<ProtectedRoutes/>}> */}
-        <Route path='HomePage' element={<Home/>}/>
-        <Route path='HistoryPage' element={<History/>}/>   
-        <Route path='UserPage' element={<User/>}/>  
-        <Route path='ResultPage/:id' element={<Result/>}/>  
-        <Route path='ForgotPage' element={<ForgotPassword/>}/>
-        <Route path='ResetPasswordPage' element={<ResetPassword/>}/>
-        <Route path='SearchPage' element={<Search/>}/>
-        <Route path='UploadimgPage' element={<UploadImage/>}/>
-      {/* </Route> */}
-      <Route path="*" element={<p style={{color: "#F9994C"}}>There's nothing here: 404!</p>} />
-  </Routes>
-</Router>
-);
+  return (
+    <Router>
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route path='RegisterPage' element={<Register />} />
+        <Route path='ForgotPage' element={<ForgotPassword />} />
+        <Route path='ResetPasswordPage' element={<ResetPassword />} />
+        <Route element={<Protected />}>
+          <Route path='HomePage' element={<Home />} />
+          <Route path='HistoryPage' element={<History />} />
+          <Route path='UserPage' element={<User />} />
+          <Route path='ResultPage/:id' element={<Result />} />
+          <Route path='SearchPage' element={<Search />} />
+          <Route path='UploadimgPage' element={<UploadImage />} />
+        </Route>
+        <Route path="*" element={<p style={{ color: "#F9994C" }}>There's nothing here: 404!</p>} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

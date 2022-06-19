@@ -49,7 +49,6 @@ export default function Login() {
                             'Content-Type': 'application/json'
                         }
                     }).then((res) => {
-                        console.log(res);
                         if (res.status === 201) {
                             localStorage.setItem('auth_token', res.data.token);
                             navigate('/HomePage');

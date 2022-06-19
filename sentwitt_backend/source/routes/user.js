@@ -64,7 +64,7 @@ router.post("/logout", auth, async (req, res) => {
         req.user.tokens = req.user.tokens.filter(token => token.token !== req.token);
         await req.user.save();
         
-        res.send({message: "Logged Out"});
+        res.status(200).send({message: "Logged Out"});
     }
     catch(error) {
         res.status(500).send({error: error.message});
@@ -91,7 +91,7 @@ router.post("/forgotPassword", async (req, res) => {
             throw new Error("No user registered with the provided Email Address.");
         }
         // generating random 4 digit number
-        const code = Math.random() * (9999 - 1000) + 1000;
+        const code = Math.floor(Math.random() * (9999 - 1000) + 1000);
         
         // save OTP for compare
         let otp = await OTP.updateOne({email: user.email}, {email: user.email, code: code}, {upsert: true});
