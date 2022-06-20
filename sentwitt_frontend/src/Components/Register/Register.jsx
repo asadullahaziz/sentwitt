@@ -11,21 +11,23 @@ const initialValues = {
     name: '',
     email: '',
     password: '',
-    Repeat_password: ''
+    Repeat_password: '',
+    code: ''
 }
 
 const validationSchema = yup.object({
     name: yup.string().required('Required!').min(2, 'Too Short!').max(20, 'Too Long!'),
     email: yup.string().email('Invalid email format').required('Required!'),
     password: yup.string().required('No password provided!').min(8, 'Password is too short (8 chars minimum)!').matches(/[a-zA-Z]/, 'Password can only contain Latin letters!'),
-    Repeat_password: yup.string().oneOf([yup.ref('password'), ''], 'Passwords must match').required('Required!')
+    Repeat_password: yup.string().oneOf([yup.ref('password'), ''], 'Passwords must match').required('Required!'),
+    code: yup.string().required('Required!').min(4, 'invalid code!').max(4, 'invalid code!')
 })
 
 
 
 export default function Register() {
     const navigate = useNavigate();
-    const [invalidUsernameOrPassword, setInvalidUsernameOrPassword] = useState(false);
+    const [error, setError] = useState("");
     const [passwordShown, setPasswordShown] = useState(false);
 
     const togglePassword = () => {
@@ -44,29 +46,26 @@ export default function Register() {
 
                 const SignupButtonClicked = (event) => {
                     event.preventDefault();
-
-                    console.log(formik.values);
                     axios.post(process.env.REACT_APP_BACKEND_ADDRESS + "user", {
                         name: formik.values.name,
                         email: formik.values.email,
-                        password: formik.values.password
+                        password: formik.values.password,
+                        code: formik.values.code
                     }, {
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     }).then((res) => {
-                        console.log(res);
                         if (res.status === 201) {
                             localStorage.setItem('auth_token', res.data.token);
                             navigate('/HomePage');
                         } else {
-                            setInvalidUsernameOrPassword(true);
+                            throw new Error("Invalid code entered");
                         }
-                    }).catch((error) => {
-                        console.log(error);
-                        if (error.response.status === 500) {
-                            setInvalidUsernameOrPassword(true);
-                        }
+                    }).catch((e) => {
+                        console.log(e);
+                        if(e.response.data.includes("duplicate")) setError("Email already registered!")
+                        else setError(e.response.data);
                     })
                 }
                 return (
@@ -80,7 +79,7 @@ export default function Register() {
                                     <h2 className=' font-color '>Sentwitt</h2>
                                 </div>
                                 <h2 className='font-color'>Sign up</h2>
-                                {invalidUsernameOrPassword && <div className='errors'>Please provide all required fields correctly</div>}
+                                {error && <div className='errors'>{error}</div>}
                                 <Form className="register-form" id="register-form">
 
                                     <div className="input-group form-group">
@@ -88,7 +87,6 @@ export default function Register() {
                                             <div className="input-group-text" id='input-name'><i className="zmdi zmdi-account zmdi-hc-2x p-1 "></i></div>
                                         </div>
                                         <Field type="text" name='name' className='form-control form-control-Register' placeholder="Enter Your Name" />
-
                                     </div>
                                     <div className="errors"><ErrorMessage name='name' /></div>
 
@@ -97,9 +95,16 @@ export default function Register() {
                                             <div className="input-group-text" id='input-name'><i className="zmdi zmdi-email zmdi-hc-2x "></i></div>
                                         </div>
                                         <Field type="email" name='email' className='form-control form-control-Register' placeholder="Example@gmail.com" />
-
                                     </div>
                                     <div className="errors"><ErrorMessage name='email' /></div>
+
+                                    <div className="input-group form-group">
+                                        <div className="input-group-prepend">
+                                            <div className="input-group-text" id='input-code'><i className="zmdi zmdi-account zmdi-hc-2x p-1 "></i></div>
+                                        </div>
+                                        <Field type="number" name='code' className='form-control form-control-Register' placeholder="Enter code which we Emailed you" />
+                                    </div>
+                                    <div className="errors"><ErrorMessage name='code' /></div>
 
                                     <div className='form-group input-group'>
                                         <div className="input-group-prepend">
@@ -107,7 +112,6 @@ export default function Register() {
                                         </div>
                                         <Field type={passwordShown ? "text" : "password"} name='password' className='form-control form-control-Register' placeholder="Password" id="id_password" />
                                         <i class={`zmdi ${passwordShown ? "zmdi-eye-off" : "zmdi-eye"}`} onClick={togglePassword}></i>
-
                                     </div>
                                     <div className="errors"><ErrorMessage name='password' /></div>
 
@@ -124,7 +128,7 @@ export default function Register() {
                                     <div className='sep'>
                                         <span className='or'>OR</span>
                                     </div>
-                                    
+
                                     <div class="signin">
                                         <p className="form-group text-center signin-link">
                                             Already have an account?

@@ -1,9 +1,17 @@
 from fastapi import FastAPI, Request
 from scraper.scraper import scrape
 from sentiment_analysis.sentiment import perform_sentiment
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/tweetAnalysis")
 async def tweetAnalysis(request: Request):

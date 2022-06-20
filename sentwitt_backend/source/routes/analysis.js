@@ -67,9 +67,21 @@ router.patch("/analysis/:id", auth, async (req, res) => {
         if(!analysis) {
             res.status(400).send({error: "No analysis found."});
         }
-        // Update Analysis will be implementer here <<=====================
+        
         // delete old tweets
+        await Tweet.deleteMany({analysisId: req.params.id});
+        
         //get new tweets
+        // Microservice API Call
+        let response = await axios.post(`${process.env.TSA_MS_ADDRESS}/tweetAnalysis`, {
+            query: analysis.queryType + analysis.query,
+            limit: analysis.limit,
+            analysisId: analysis._id.toString()
+        });
+        let tweets = response.data;
+        
+        await Tweet.insertMany(tweets);
+
         res.status(200).send(analysis);
     }
     catch(error) {

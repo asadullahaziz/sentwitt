@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import React from 'react'
 import styles from "../Sidebar/Sidebar.css";
-import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { FaUserCircle } from 'react-icons/fa'
 import { FaPlus } from 'react-icons/fa'
 import { FaRegListAlt } from 'react-icons/fa'
@@ -35,13 +35,13 @@ const routes = [
   },
 
   {
-    path: "/SearchPage",
+    path: "/TextAnalysisPage",
     name: "Text",
     icon: <FaPencilAlt size="30px" />,
   },
 
   {
-    path: "/UploadimgPage",
+    path: "/UploadImgPage",
     name: "Image",
     icon: <FaRegFileImage size="30px" />,
   },
@@ -59,6 +59,7 @@ export default function Sidebar() {
 
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
+  const navigate = useNavigate();
 
   const showAnimation = {
     hidden: {
@@ -85,8 +86,9 @@ export default function Sidebar() {
           Authorization: 'Bearer ' + localStorage.getItem('auth_token')
         }
       });
-      if(response.status === 200){
+      if (response.status === 200) {
         localStorage.removeItem("auth_token");
+        navigate("/");
       }
       else {
         throw new Error("Something went wrong");
@@ -107,43 +109,34 @@ export default function Sidebar() {
       }} className="sidebar">
 
         <div className='top_section'>
-          {/* <div className='span_Register'><img className='image_sidebar' src={img1} alt="Logo" /></div>
-          <div className='top_section'>
-            {isOpen && <motion.div className='span_Register'><img className='image_sidebar' src={img1} alt="Logo" />
-              <motion.h1 initial="hidden"
-                variants={showAnimation}
-                animate="show"
-                exit="hidden"
-                className='logo'>Sentwitt</motion.h1></motion.div>
-            } */}
-            {isOpen && (<motion.h1 initial="hidden"
-              variants={showAnimation}
-              animate="show"
-              exit="hidden"
-              className='logo'>Sentwitt</motion.h1>)}
-            <div className='bars'>
-              <FaBars onClick={toggle} size="30px" />
-            </div>
+          {isOpen && (<motion.h1 initial="hidden"
+            variants={showAnimation}
+            animate="show"
+            exit="hidden"
+            className='logo'>Sentwitt</motion.h1>)}
+          <div className='bars'>
+            <FaBars onClick={toggle} size="30px" />
           </div>
-          <section className='routes'>
-            {
-              routes.map((route) => (
-                <NavLink activeClassName="active"
-                  to={route.path}
-                  key={route.name}
-                  className='link'>
-                  <div className="icon">{route.icon}</div>
-                  <AnimatePresence>
-                    {isOpen && (<motion.div variants={showAnimation}
-                      initial="hidden"
-                      animate="show"
-                      exit="hidden"
-                      className='link_text' >{route.name}</motion.div>)}
-                  </AnimatePresence>
-                </NavLink>
-              ))
-            }
-            <NavLink activeClassName="active" onClick={logout}
+        </div>
+        <section className='routes'>
+          {
+            routes.map((route) => (
+              <NavLink activeClassName="active"
+                to={route.path}
+                key={route.name}
+                className='link'>
+                <div className="icon">{route.icon}</div>
+                <AnimatePresence>
+                  {isOpen && (<motion.div variants={showAnimation}
+                    initial="hidden"
+                    animate="show"
+                    exit="hidden"
+                    className='link_text' >{route.name}</motion.div>)}
+                </AnimatePresence>
+              </NavLink>
+            ))
+          }
+          <NavLink activeClassName="active" onClick={logout}
               to="/"
               key="Log Out"
               className='link'>
@@ -156,7 +149,17 @@ export default function Sidebar() {
                   className='link_text' >Log Out</motion.div>)}
               </AnimatePresence>
             </NavLink>
-          </section>
+          {/* <button className='active' onClick={logout}>
+            <div className="icon"><FaPowerOff size="30px" /></div>
+            <AnimatePresence>
+              {isOpen && (<motion.div variants={showAnimation}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                className='link_text' >Log Out</motion.div>)}
+            </AnimatePresence>
+          </button> */}
+        </section>
       </motion.div>
     </React.Fragment>
   )

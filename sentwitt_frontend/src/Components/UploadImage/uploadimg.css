@@ -1,0 +1,9 @@
+.imageSentiment {
+    margin-left: 30%;
+    margin-right: 30%;
+    padding: 10px;
+    border: 1px solid #F9994C;
+    background-color: #2A2E35;
+    border-radius: 5px;
+    text-align: center;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from "../Login/Login.css";
 import img1 from '../../images/sentwintt.png';
@@ -24,6 +24,12 @@ export default function Login() {
 
     const [passwordShown, setPasswordShown] = useState(false);
     const [invalidUsernameOrPassword, setInvalidUsernameOrPassword] = useState(false);
+
+    useEffect(() => {
+        if(localStorage.getItem('auth_token')){
+            navigate("/HomePage");
+        }
+    });
 
     const togglePassword = () => {
         // When the handler is invoked
@@ -106,7 +112,7 @@ export default function Login() {
                                         <div className="errors"><ErrorMessage name='password' /></div>
 
                                         <div className='forgot'>
-                                            <Link to="ForgotPage">&nbsp;Forgot Password?</Link>
+                                            <Link to="VarifyEmailPage/ResetPasswordPage">&nbsp;Forgot Password?</Link>
                                         </div>
                                         <button onClick={loginButtonClicked} type='submit' className='form-control form-control-login btn-style' disabled={!formik.isValid}> Login </button>
                                         <div className='sep'>
@@ -117,7 +123,7 @@ export default function Login() {
                                             <p className="form-group text-center signin-link">
                                                 Don't have an account?
 
-                                                <Link to="RegisterPage" className='font-color'>&nbsp;Register</Link></p>
+                                                <Link to="VarifyEmailPage/RegisterPage" className='font-color'>&nbsp;Register</Link></p>
                                         </div>
                                     </Form>
                                 </div>

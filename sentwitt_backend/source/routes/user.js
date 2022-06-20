@@ -8,6 +8,10 @@ const mailOTP = require("../utils/mail");
 // Create
 router.post("/user", async (req, res) => {
     try {
+        // check if code is in database
+        await OTP.checkOTP(req.body.email, req.body.code);
+        
+        // Create new user
         let user = new User(req.body);
         let token = await user.generateAuthToken();
         res.status(201).send({user, token});
@@ -83,26 +87,21 @@ router.post("/logoutAll", auth, async (req, res) => {
     }
 });
 
-router.post("/forgotPassword", async (req, res) => {
+router.post("/varifyEmail", async (req, res) => {
     try {
-        // varifying email
-        let user = await User.findOne({email: req.body.email});
-        if(!user){
-            throw new Error("No user registered with the provided Email Address.");
-        }
         // generating random 4 digit number
         const code = Math.floor(Math.random() * (9999 - 1000) + 1000);
         
         // save OTP for compare
-        let otp = await OTP.updateOne({email: user.email}, {email: user.email, code: code}, {upsert: true});
+        let otp = await OTP.updateOne({email: req.body.email}, {email: req.body.email, code: code}, {upsert: true});
         if(!otp) {
             throw new Error("Code already sent");
         }
         
         // email user
-        let result = mailOTP(user.email, code);
+        let result = mailOTP(req.body.email, code);
         
-        res.status(200).send({message: "Code has been sent to your email address at " + user.email});
+        res.status(200).send({message: "Code has been sent to your email address at " + req.body.email});
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -110,12 +109,16 @@ router.post("/forgotPassword", async (req, res) => {
 
 router.post("/resetPassword", async (req, res) => {
     try {
+        // varifying email
+        let user = await User.findOne({email: req.body.email});
+        if(!user){
+            throw new Error("No user registered with the provided Email Address.");
+        }
+
         // check if code is in database
         await OTP.checkOTP(req.body.email, req.body.code);
         
         // update password
-        let user = await User.findOne({email: req.body.email});
-        
         user.password = req.body.password;
         user.save();
         
