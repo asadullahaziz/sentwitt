@@ -43,3 +43,4 @@ db_data
 
 # Machine Learning Model and tokenizers
 cardiffnlp
+result.csv
